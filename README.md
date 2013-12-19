@@ -25,7 +25,7 @@ The master branch has the following requirements:
 * Include the Jmenu helper in your `AppController.php`:
    * `public $helpers = array('Jmenu.Jmenu');`
 * For permission based menu, Configure the _getUser function with your user aro in `app/Plugin/Jmenu/View/JmenuHelper.php`.
-	#### Example of _getUser
+#### Example of _getUser function configuration
 	private function _getUser() {
 		return 'Admin/unknown_user';
 		//or
