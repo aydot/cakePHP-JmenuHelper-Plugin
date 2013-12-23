@@ -3,7 +3,7 @@ App::uses('AppHelper', 'View/Helper');
 
 class JmenuHelper extends AppHelper {
         
-	public $helpers = array('Html', 'Permission');
+	public $helpers = array('Html', 'Session', 'Jmenu.Permission');
 	
 	private $_menuValues = array();
 	private $_menuString = null;
@@ -106,13 +106,11 @@ class JmenuHelper extends AppHelper {
 	}
 	
 	private function _getUser() {
-		//$user = 'Admin/unknown_user'; or
-		$user = array(
-			'User' => array(
-				'username' => 'unknown_user',
-				'group_id' => '1',
-			)
-		);
+		if (empty($this->settings['userModel'])){
+			throw new CakeException("User Model option wasn't configured in the helper declaration.");
+		}
+		$user = $this->Session->read('Auth.User');
+		$user = array($this->settings['userModel'] => $user);
 		return $user;
 	}
 	
@@ -124,16 +122,16 @@ class JmenuHelper extends AppHelper {
 		reset($menuParts);
 
 		if (count($menuParts) > 1) {
-				foreach ($menuParts as $part) {
-						$isAcutalMenu = ($actualMenu === $part);
-						
-						if ( ! $isAcutalMenu){
-								$parentMenuExists = (array_key_exists($part, $this->_menuOption));
-								if( ! $parentMenuExists){
-										return false;
-								}
-						}
+			foreach ($menuParts as $part) {
+				$isAcutalMenu = ($actualMenu === $part);
+				
+				if ( ! $isAcutalMenu){
+					$parentMenuExists = (array_key_exists($part, $this->_menuOption));
+					if( ! $parentMenuExists){
+							return false;
+					}
 				}
+			}
 		} 
 		return true;
 	}
@@ -141,9 +139,9 @@ class JmenuHelper extends AppHelper {
 	private function _setMenuOption($menuName, array $options) {
 		$menuParts = $this->_explodeAndIndexFilteredValueNumerically($menuName);
 		if (count($menuParts) > 1) {
-				$actualMenu = end($menuParts);
+			$actualMenu = end($menuParts);
 		} else {
-				$actualMenu = current($menuParts);
+			$actualMenu = current($menuParts);
 		}
 		
 		$this->_menuOption[$actualMenu] = $options;
@@ -155,15 +153,15 @@ class JmenuHelper extends AppHelper {
 	
 	private function _constructMenuString($menus) {
 		if ( ! empty($menus)) {
-				foreach ($menus as $menuVal => $menu) {
-						if (is_array( $menu)) {
-								$this->_menuString .= "<li> {$this->_setMenuValueWithOptions($menuVal)} <ul>";
-								$this->_constructMenuString($menu);
-						} else {
-								$this->_menuString .= "<li> {$this->_setMenuValueWithOptions($menuVal)} </li>";
-						}
+			foreach ($menus as $menuVal => $menu) {
+				if (is_array( $menu)) {
+					$this->_menuString .= "<li> {$this->_setMenuValueWithOptions($menuVal)} <ul>";
+					$this->_constructMenuString($menu);
+				} else {
+					$this->_menuString .= "<li> {$this->_setMenuValueWithOptions($menuVal)} </li>";
 				}
-				$this->_menuString .= "</ul></li>";
+			}
+			$this->_menuString .= "</ul></li>";
 		}
 	}
 	

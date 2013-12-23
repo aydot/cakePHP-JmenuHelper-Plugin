@@ -24,25 +24,14 @@ The master branch has the following requirements:
 	* `echo $this->Html->script('/Jmenu/js/jquery/plugins/jquery-ui/jquery-ui.min');`
 * Include the Jmenu helper in your `AppController.php`:
    * `public $helpers = array('Jmenu.Jmenu');`
-* For permission based menu, Configure the _getUser function with your user aro in `app/Plugin/Jmenu/View/JmenuHelper.php`.
-
-
-#### Example of _getUser function configuration
-	private function _getUser() {
-		return 'Admin/unknown_user';
-		//or
-		$user = array(
-			'User' => array(
-				'username' => 'unknown_user',
-				'group_id' => '1',
-			)
-		);
-		return $user;
-	}
+* For permission based menu, pass in your user model as an option:
+   * `public $helpers = array('Jmenu.Jmenu' => array('userModel' => 'Contact'));`
 
 ## Versions
 
+* `1.0.1` is compatible with CakePHP 2.3.0 and greater; now pass in user model to the helper option, used to setup the aro. no need to overwrite the JmenuHelper::getUser function
 * `1.0` is compatible with CakePHP 2.3.0 and greater
+
 
 ## Usage Example
 
