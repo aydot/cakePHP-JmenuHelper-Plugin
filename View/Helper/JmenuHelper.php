@@ -109,8 +109,11 @@ class JmenuHelper extends AppHelper {
 		if (empty($this->settings['userModel'])){
 			throw new CakeException("User Model option wasn't configured in the helper declaration.");
 		}
-		$user = $this->Session->read('Auth.User');
-		$user = array($this->settings['userModel'] => $user);
+		$user = array();
+		if ($this->Session->check('Auth.User')){
+			$user = $this->Session->read('Auth.User');
+			$user = array($this->settings['userModel'] => $user);
+		}
 		return $user;
 	}
 	

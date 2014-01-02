@@ -14,7 +14,11 @@ class PermissionHelper extends AppHelper {
 	}
 	
 	public function check($aro, array $aco, $action = '*') {
-		return  $this->_permissionModel->check($aro, $this->action($aco), $action );
+		try {
+			return $this->_permissionModel->check($aro, $this->action($aco), $action );
+		} catch( Exception $e ) {
+			return false;
+		}
 	}
 	
 	public function action($permissionRequest, $path = '/:plugin/:controller/:action') {
