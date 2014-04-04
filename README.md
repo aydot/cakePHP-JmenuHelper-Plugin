@@ -37,7 +37,7 @@ The master branch has the following requirements:
 
 #### Usage
 
-	Set your menu with the input function
+	In your view file, set your menu with the input function
 	$options =  array('url' => 'cake based url path', 'permission' => 'cake based permision aco'); // usually null for parent menu
 	$this->Jmenu->input('menu name', $options); 
 	call echo $this->Jmenu->show();
